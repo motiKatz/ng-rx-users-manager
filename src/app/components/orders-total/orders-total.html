@@ -1,0 +1,37 @@
+@if (loading$ | async) {
+  <div class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading orders...</p>
+  </div>
+} @else if (selectedUserOrders$ | async; as orders) {
+  <div class="orders-total-display">
+    <h3>Orders Summary</h3>
+    <div class="total-amount">
+      <span class="amount-label">Total Amount:</span>
+      <span class="amount-value">${{ calculateTotal(orders) | number:'1.2-2' }}</span>
+    </div>
+    <div class="orders-count">
+      <span class="count-label">Number of Orders:</span>
+      <span class="count-value">{{ orders.length }}</span>
+    </div>
+    
+    @if (orders.length > 0) {
+      <div class="orders-list">
+        <h4>Order Details:</h4>
+        @for (order of orders; track order.id) {
+          <div class="order-item">
+            <div class="order-info">
+              <span class="order-description">{{ order.description }}</span>
+              <span class="order-date">{{ order.date }}</span>
+            </div>
+            <div class="order-amount">${{ order.amount | number:'1.2-2' }}</div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <div class="no-orders">
+    <p>No orders found for selected user</p>
+  </div>
+}

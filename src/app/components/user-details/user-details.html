@@ -1,0 +1,32 @@
+<div class="user-details">
+  @if (loading()) {
+    <div class="details-loading">
+      <div class="loading-spinner"></div>
+      <h3>Loading User Details...</h3>
+      <p>Please wait while we fetch the user information and orders.</p>
+    </div>
+  } @else if (userSummary()) {
+    <div class="details-content">
+      <h3>Selected User Details</h3>
+      <div class="details-grid">
+        <div class="user-name-section">
+          <h4>User Information</h4>
+          <app-user-name></app-user-name>
+        </div>
+        
+        <div class="orders-total-section">
+          <h4>Orders Information</h4>
+          <app-orders-total></app-orders-total>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="no-selection">
+      <div class="no-selection-content">
+        <span class="no-selection-icon">👤</span>
+        <h3>No User Selected</h3>
+        <p>Click on a user from the list to view their details and orders.</p>
+      </div>
+    </div>
+  }
+</div>

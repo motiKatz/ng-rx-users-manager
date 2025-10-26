@@ -1,0 +1,45 @@
+.user-orders-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #ecf0f1;
+
+    h2 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 2.5rem;
+    }
+
+    .loading {
+      color: #3498db;
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+  }
+
+  .main-content {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+    align-items: start;
+    min-height: 600px; // Ensure minimum height for both sections
+
+    app-user-details,
+    app-user-selection {
+      height: 100%;
+    }
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      min-height: auto;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+<div class="user-orders-container">
+  <div class="header">
+    <h2>User Orders Management</h2>
+    @if (loading$ | async) {
+      <div class="loading">
+        <span>Loading...</span>
+      </div>
+    }
+  </div>
+
+  <div class="main-content">
+    <!-- User Selection List -->
+    <app-user-selection
+      [users]="(allUsers$ | async) ?? []"
+      [loading]="(loading$ | async) ?? false"
+      (userSelected)="onUserSelected($event)"
+      (userEditRequested)="onUserEditRequested($event)"
+      (userDeleteRequested)="onUserDeleteRequested($event)"
+      (addUserRequested)="onAddUserRequested()"
+      (clearSelectionRequested)="onClearSelectionRequested()">
+    </app-user-selection>
+
+    <!-- Selected User Details -->
+    <app-user-details
+      [userSummary]="userSummary$ | async"
+      [loading]="(loadingUserDetails$ | async) ?? false">
+    </app-user-details>
+  </div>
+
+  <!-- Modals -->
+  <app-user-form-modal
+    [mode]="formModalMode"
+    [user]="userToEdit"
+    [isVisible]="formModalVisible"
+    [existingUsers]="allUsers"
+    (save)="onUserSaved($event)"
+    (cancel)="onFormCancelled()">
+  </app-user-form-modal>
+
+  <app-delete-confirmation-modal
+    [user]="userToDelete"
+    [isVisible]="deleteModalVisible"
+    (confirm)="onDeleteConfirmed($event)"
+    (cancel)="onDeleteCancelled()">
+  </app-delete-confirmation-modal>
+</div>

@@ -1,0 +1,18 @@
+@if (loading$ | async) {
+  <div class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading user details...</p>
+  </div>
+} @else if (selectedUser$ | async; as user) {
+  <div class="user-name-display">
+    <h3>{{ user.name }}</h3>
+    <p class="user-email">{{ user.email }}</p>
+    @if (user.phone) {
+      <p class="user-phone">{{ user.phone }}</p>
+    }
+  </div>
+} @else {
+  <div class="no-user-selected">
+    <p>No user selected</p>
+  </div>
+}

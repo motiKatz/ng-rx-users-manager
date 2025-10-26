@@ -1,0 +1,102 @@
+@if (isVisible()) {
+  <div class="modal-overlay" (click)="onCancel()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ modalTitle }}</h3>
+        <button class="close-button" (click)="onCancel()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <form [formGroup]="userForm">
+          <div class="form-group">
+            <label for="id">ID:</label>
+            @if (isAddMode) {
+              <div class="id-input-group">
+                <input 
+                  type="number" 
+                  id="id" 
+                  formControlName="id"
+                  placeholder="Enter user ID">
+                <button 
+                  type="button" 
+                  (click)="generateNextId()" 
+                  class="generate-id-btn"
+                  title="Generate next available ID">
+                  Auto
+                </button>
+              </div>
+              @if (hasError('id', 'required')) {
+                <span class="error-message">ID is required</span>
+              }
+              @if (hasError('id', 'min')) {
+                <span class="error-message">ID must be greater than 0</span>
+              }
+              @if (duplicateWarning) {
+                <span class="warning-message">{{ duplicateWarning }}</span>
+              }
+            } @else {
+              <input 
+                type="number" 
+                id="id" 
+                formControlName="id"
+                readonly
+                class="readonly-field">
+              <span class="field-note">ID cannot be changed</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input 
+              type="text" 
+              id="name" 
+              formControlName="name"
+              placeholder="Enter user name">
+            @if (hasError('name', 'required')) {
+              <span class="error-message">Name is required</span>
+            }
+            @if (hasError('name', 'minlength')) {
+              <span class="error-message">Name must be at least 2 characters</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              placeholder="Enter email address">
+            @if (hasError('email', 'required')) {
+              <span class="error-message">Email is required</span>
+            }
+            @if (hasError('email', 'email')) {
+              <span class="error-message">Please enter a valid email</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              formControlName="phone"
+              placeholder="Enter phone number (optional)">
+            @if (hasError('phone', 'pattern')) {
+              <span class="error-message">Please enter a valid phone number</span>
+            }
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" (click)="onCancel()" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button type="button" (click)="onSave()" class="btn btn-primary">
+          {{ saveButtonText }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

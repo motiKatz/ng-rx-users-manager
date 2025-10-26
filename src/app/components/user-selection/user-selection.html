@@ -1,0 +1,43 @@
+<div class="user-selection">
+  <div class="user-selection-header">
+    <h3>Users</h3>
+    <button (click)="onAddUser()" class="add-user-btn" title="Add new user">
+      ➕ Add User
+    </button>
+  </div>
+  
+  @if (loading()) {
+    <div class="loading">
+      <span>Loading users...</span>
+    </div>
+  } @else {
+    <div class="users-list">
+      @for (user of users(); track user.id) {
+        <div class="user-item">
+          <div class="user-info" (click)="onSelectUser(user.id)">
+            <span class="user-name">{{ user.name }}</span>
+            <span class="user-email">{{ user.email }}</span>
+          </div>
+          <div class="user-actions">
+            <button 
+              (click)="onEditUser(user)" 
+              class="action-btn edit-btn"
+              title="Edit user">
+              ✏️
+            </button>
+            <button 
+              (click)="onDeleteUser(user)" 
+              class="action-btn delete-btn"
+              title="Delete user">
+              🗑️
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+    
+    <button (click)="onClearSelection()" class="clear-button">
+      Clear Selection
+    </button>
+  }
+</div>
