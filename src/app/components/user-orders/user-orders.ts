@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserSummary, User } from '../../models/user.model';
 import { selectUserSummary, selectAllUsers, selectLoading, selectLoadingUserDetails } from '../../store/selectors/user.selectors';
 import * as UserActions from '../../store/actions/user.actions';
@@ -18,7 +18,7 @@ import { DeleteConfirmationModalComponent } from '../delete-confirmation-modal/d
   imports: [CommonModule, UserSelectionComponent, UserDetailsComponent, UserFormModalComponent, DeleteConfirmationModalComponent],
   standalone: true
 })
-export class UserOrdersComponent implements OnInit, OnDestroy {
+export class UserOrdersComponent implements OnInit {
   userSummary$: Observable<UserSummary | null>;
   allUsers$: Observable<User[]>;
   loading$: Observable<boolean>;
@@ -32,7 +32,7 @@ export class UserOrdersComponent implements OnInit, OnDestroy {
   userToDelete: User | null = null;
   allUsers: User[] = [];
   
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
 
   constructor(private store: Store) {
     this.userSummary$ = this.store.select(selectUserSummary);
@@ -45,17 +45,12 @@ export class UserOrdersComponent implements OnInit, OnDestroy {
     // Load users when component initializes
     this.store.dispatch(UserActions.loadUsers());
     
-    // Subscribe to users
+    // Subscribe to users to keep local copy for duplicate checking
     this.allUsers$.pipe(
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(users => {
       this.allUsers = users;
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   // User selection event handlers
